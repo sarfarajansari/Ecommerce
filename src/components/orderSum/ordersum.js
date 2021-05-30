@@ -2,11 +2,12 @@ import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom"
 import Loading from "../loading/loading"
 import "./order.css"
+import Postreq from "../request/post_request"
 
 
 export default function Ordersum(props) {
     const id = props.id
-    const [loaded, setloaded] = useState(false)
+    const [pagestatus, setpagestatus] = useState(-1)
     const [notfound, setnotfound] = useState(false)
     const [order, setorder] = useState({
       orderitems:[],
@@ -20,23 +21,8 @@ export default function Ordersum(props) {
     })
     console.log(id)
 
-    async function get_order() {
-        var url = "/api/completed/order/"+ String(id) +"?format=json";
-        var response = await fetch(url)
-        const data = await response.json()
-        if(data["status"]===0){
-          setorder(data)
-          console.log(data)
-          setloaded(true)
-        }
-        else{
-          setnotfound(true)
-        }
-        
-       }
-
     useEffect(() => {
-      get_order()
+      Postreq("/api/completed/order/"+ String(id),{},setorder,setpagestatus)
     }, [])
 
     if(notfound){
@@ -49,10 +35,10 @@ export default function Ordersum(props) {
 
   return (
     <>
-    <div className={loaded?"hidden":""}>
+    <div className={pagestatus===0?"hidden":""}>
         <Loading/>
     </div>
-    <div className={loaded?"transition-effect":"transition-effect obj-hidden"}>
+    <div className={pagestatus===0?"transition-effect":"transition-effect obj-hidden"}>
       <h3 className="text-center" style={{ color: "rgb(114, 37, 23)" }}>
             ORDER NO : {id}
           </h3>

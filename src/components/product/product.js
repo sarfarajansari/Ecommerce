@@ -5,57 +5,26 @@ import { Link } from "react-router-dom";
 import * as Hi from "react-icons/hi"
 import {FaArrowAltCircleRight,FaArrowAltCircleLeft} from "react-icons/fa"
 import Alert from "../min/alert"
+import Postreq from "../request/post_request"
+import app_data from "../app_data/app_data"
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+
 function ProductComponent(props) {
     const Id = props.id
     const [Product, setProduct] = useState({
         details:[],
         images:[],
         quantity:0,
+        status:0,
     })
-    const [message, setmessage] = useState("")
-
+    const [message, setmessage] = useState({message:""})
     const [Current, setCurrent] = useState(0)
-    const [Loaded, setLoaded] = useState(false)
-    const [notfound, setnotfound] = useState(false)
+    const [status, setstatus] = useState(-1)
 
-
-    const get_product = ()=>{
-        fetch("/api/product/" + String(Id)+"/")
-        .then((response)=>{
-            return response.json()
-        })
-        .then((data)=>{
-            if(data["status"]===0){
-                setProduct(data)
-                setLoaded(true)
-            }
-            else{
-                setnotfound(true)
-            }
-            
-        })
-
-    }
     useEffect(() => {
-        get_product()
+        Postreq("/api/product/" + String(Id)+"/",{},setProduct,setstatus)
         window.onscroll=()=>{
-            setmessage("")
+            setmessage({message:""})
         }
     }, [])
     const next_image= ()=>{
@@ -85,19 +54,11 @@ function ProductComponent(props) {
         }
     }
     async function update_cart(id,action) {
-        var url ='/api/update/product/'+ String(action) +'/'+ String(id) + '/?format=json';
-        const csrftoken = getCookie('csrftoken');
-        const requestdata = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
-            body:JSON.stringify({})
-        }
-        var response = await fetch(url,requestdata)
-        var data = await  response.json()
-        get_product()
-        setmessage(data.message)
+        var url ='/api/update/product/'+ String(action) +'/'+ String(id) + '/';
+        Postreq(url,{},setmessage)
+        Postreq("/api/product/" + String(Id)+"/",{},setProduct,setstatus)
     }
-    if(notfound){
+    if(Product.status!==0){
         return(
             <div className="notfound">
                 <h1>NOT FOUND!!</h1>
@@ -108,11 +69,11 @@ function ProductComponent(props) {
 
     return (
         <>
-            <div className={Loaded?"hidden":""}>
+            <div className={status===0?"hidden":""}>
                 <Loading/>
             </div>
-            <div className="store-alert"><Alert message={message}/></div>
-            <div className={Loaded?"product-grid transition-effect":"product-grid transition-effect obj-hidden"}>
+            <div className="store-alert"><Alert message={message.message}/></div>
+            <div className={status===0?"product-grid transition-effect":"product-grid transition-effect obj-hidden"}>
             <div className="head-title box-element">
             <Link to="/">
                 <button className="btn btn-outline-dark"><Hi.HiOutlineArrowNarrowLeft/> Continue Shopping</button>
@@ -127,7 +88,7 @@ function ProductComponent(props) {
                             <FaArrowAltCircleLeft className="left-arrow" onClick={previous_image}></FaArrowAltCircleLeft>
                             <FaArrowAltCircleRight className="right-arrow" onClick={next_image}></FaArrowAltCircleRight>
                             {Product.images.map((img,index)=>{
-                                return <img className={index===Current?"image active":"image"} src={img.img} alt="yellow"></img>
+                                return <img className={index===Current?"image active":"image"} src={ app_data.url.replace("store","static") + img.img} alt="yellow"></img>
                             })}
                             
                         </section>

@@ -6,8 +6,15 @@ import store from "./pages/store";
 import Product from "./pages/product";
 import order from "./pages/order";
 import Page from "./pages/page";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    if (localStorage.getItem('session') === null){
+      localStorage.setItem("session",JSON.stringify({}))
+    }
+
+  },[])
   return (
 
       <Router>

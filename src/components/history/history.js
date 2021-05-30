@@ -2,27 +2,20 @@ import React, { useState ,useEffect} from "react";
 import "./history.css";
 import Loading from "../loading/loading"
 import { Link } from "react-router-dom";
+import Postreq from "../request/post_request"
 
 function History() {
-    const [loaded, setloaded] = useState(false)
+    const [page, setpage] = useState(-1)
     const [Carts, setCarts] = useState([])
     useEffect(() => {
-        fetch("/api/order/history/")
-        .then((response)=>{
-            return response.json()
-        })
-        .then((data)=>{
-            setCarts(data)
-            console.log(data)
-            setloaded(true)
-        })
+        Postreq("/api/order/history/",{},setCarts,setpage)
     }, [])
     return (
         <>
-            <div className={loaded?"hidden":""}>
+            <div className={page===0?"hidden":""}>
                 <Loading/>
             </div>
-            <div className={loaded?"transition-effect":"transition-effect obj-hidden"}>
+            <div className={page===0?"transition-effect":"transition-effect obj-hidden"}>
                 <div className="salmon">
                     <h1 className="text-center">Order History</h1>
                 </div>

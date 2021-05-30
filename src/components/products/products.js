@@ -4,71 +4,24 @@ import Loading from "../loading/loading"
 import Cartloading from "../loading/Cartloading"
 import { Link } from "react-router-dom"
 import Alert from "../min/alert"
-
-
-
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
+import app_data from "../app_data/app_data"
+import GetRequest from "../request/get_request"
+import Postreq from "../request/post_request"
 
 function Products() {
 
     const [products, setproducts] = useState([])
     const [status, setstatus] = useState(-1)
-    const [message, setmessage] = useState("")
+    const [message, setmessage] = useState({message:""})
 
     useEffect(() => {
         window.onscroll=()=>{
-            setmessage("")
+            setmessage({message:""})
         }
     }, [])
 
-
-    async function getproducts() {
-        var url = '/api/products';
-        var response = await fetch(url)
-        var data = await  response.json()
-        setproducts(data)
-        setstatus(0)
-   
-    }
-    function addproduct(id){
-        var url = '/api/update/product/add/'+ String(id) + '/?format=json';
-        const csrftoken = getCookie('csrftoken');
-        const requestdata = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
-            body:JSON.stringify({})
-        }
-        fetch(url,requestdata)
-        .then((response)=>{
-            return response.json()
-        })
-        .then((data)=>{
-            console.log(data)
-            setmessage(data.message)
-            setstatus(0)
-        })
-    }
-
-    
-
     if(status===-1){
-        getproducts()
+        GetRequest("/api/products",setproducts,setstatus)
     }
 
 
@@ -82,19 +35,19 @@ function Products() {
                 <Loading/>
         </div>
         <div>
-            <div className="store-alert"><Alert message={message}/></div>
+            <div className="store-alert"><Alert message={message.message}/></div>
             <div class="" className={status!==-1?"store-grid transition-effect":"store-grid transition-effect obj-hidden"}>
                 {products.map((product,index) => {
                     return(
                         <div key={index}  class="elem" >
-                            <img className="thumbnail" src={product.image} alt="placeholder"/>
+                            <img className="thumbnail" src={app_data.url.replace("/store","")+"/static"+ product.image} alt="placeholder"/>
 
                             <div class="box-element product">
                                 <h6><strong>{product.name}</strong></h6>
                                 <hr/>
                                 <button class="btn btn-outline-secondary add-btn update-cart" style={{marginRight:"1.5em"}} onClick={()=>{
                                     setstatus(1)
-                                    addproduct(product.id);
+                                    Postreq('/api/update/product/add/'+ String(product.id) + '/',{},setmessage,setstatus)
                                 }} data-page="store">Add to Cart</button>
                                 <Link to={"/product/"+String(product.id)} class="btn btn-outline-success">View</Link>
                                 <h4 class="product-price">{product.price}</h4>

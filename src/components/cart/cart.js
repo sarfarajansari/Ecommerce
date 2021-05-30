@@ -4,55 +4,24 @@ import Loading from "../loading/loading"
 import { Link } from "react-router-dom";
 import * as Hi from "react-icons/hi"
 import app_data from "../app_data/app_data"
-// import Items from "./items.js"
+import Postreq from "../request/post_request"
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
 
 function CartComponent() {
     const [order, setorder] = useState({
       item:0,
       orderitems:[]
     })
-    const [loaded, setloaded] = useState(false)
+    const [pagestatus, setpagestatus] = useState(false)
 
-    async function get_order() {
-      var url ="/api/orderapi"
-      var response = await fetch(url)
-      const data = await response.json()
-      console.log(url)
-      setorder(data)
-      setloaded(true)
-      console.log(order)
-     }
+
     useEffect(() => {
-      get_order()
+      Postreq("/api/orderapi/",{},setorder,setpagestatus)
     }, [])
     async function update_cart(id,action) {
-      var url =  '/api/update/product/'+ String(action) +'/'+ String(id) + '/?format=json';
-      const csrftoken = getCookie('csrftoken');
-      const requestdata = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken},
-          body:JSON.stringify({})
-      }
-      var response = await fetch(url,requestdata)
-      var data = await  response.json()
-      console.log(data)
-      get_order()
+      var url =  '/api/update/product/'+ String(action) +'/'+ String(id) + '/';
+      Postreq(url,{})
+      Postreq("/api/orderapi/",{},setorder,setpagestatus)
     }
 
 
@@ -60,10 +29,10 @@ function CartComponent() {
     
   return (
     <>  
-      <div className={loaded?"hidden":""}>
+      <div className={pagestatus===0?"hidden":""}>
                 <Loading/>
       </div>
-      <div className={loaded?"cart-container transition-effect":"cart-container transition-effect obj-hidden"}>
+      <div className={pagestatus===0?"cart-container transition-effect":"cart-container transition-effect obj-hidden"}>
         <div className="display-totals">
           <div className=" box-element">
           <Link to="/">
@@ -130,7 +99,7 @@ function CartComponent() {
                         <Link to={"/product/"+String(item.product)}>
                         <img
                             className="row-image"
-                            src={item.image}
+                            src={app_data.url.replace("store","static")+ item.image}
                             alt=""
                           />
                         </Link>
@@ -151,19 +120,19 @@ function CartComponent() {
                         {item.quantity}
                         </p>
                         <div class="quantity">
-                            <hr></hr>
+                            
                         <img
                             alt="increase quantity"
                             class="chg-quantity update-cart"
                             onClick={()=>update_cart(item.product,"add")}
-                            src="/static/images/arrow-up.png"
+                            src={app_data.url.replace("store","static"+"/media/arrow-up.png")}
                         />
   
                         <img
                             alt="decrease quantity"
                             class="chg-quantity update-cart"
                             onClick={()=>update_cart(item.product,"remove")}
-                            src="/static/images/arrow-down.png"
+                            src={app_data.url.replace("store","static"+"/media/arrow-down.png")}
                         />
                         </div>
                     </div>

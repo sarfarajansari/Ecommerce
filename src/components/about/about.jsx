@@ -4,21 +4,9 @@ import {AiTwotoneMail,AiFillTwitterCircle,AiFillGithub} from "react-icons/ai"
 import {FcHome} from "react-icons/fc"
 import {CgInstagram} from "react-icons/cg"
 import {ImLinkedin} from "react-icons/im"
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+import app_data from "../app_data/app_data"
+
+
 const Error=(props)=>{
     if(props.error){
         return(
@@ -48,17 +36,16 @@ export default function About() {
         error:""
     });
     const send_message=()=>{
-        const csrftoken = getCookie('csrftoken');
         const requestdata = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
+            headers: { 'Content-Type': 'application/json'},
             body:JSON.stringify({
                 "name":name,
                 "email":email,
                 "text":text
             })
         }
-        fetch("/api/message/",requestdata)
+        fetch(app_data.url + "/api/message/",requestdata)
         .then((response)=>{
             return response.json()
         })
@@ -107,6 +94,7 @@ export default function About() {
           <form onSubmit={(e)=>{
               e.preventDefault()
               send_message()
+
           }}>
             <div>
               <input type="text" value={name} onChange={(e)=>setname(e.target.value)} required placeholder="Name" />
