@@ -1,0 +1,32 @@
+.login-flex{
+    display: flex;
+    justify-content: center;
+}
+.Google{
+    width: 70%;
+}
+.salmon{
+    background-color: salmon;
+}
+.salmon:hover{
+    background-color: rgb(153, 32, 18);
+}
+.login-form{
+    margin:0 10px;
+}
+@media screen and (min-width:750px) {
+    .login-form{
+        margin:0 15%;
+        margin-right: calc(15% + 80px);
+    }
+    .Google{
+        width: 60%;
+    }
+    
+}
+.form-control.r{
+    background-color: rgb(250, 206, 201);
+}
+.form-control.g{
+    background-color: rgb(176, 243, 181);
+}

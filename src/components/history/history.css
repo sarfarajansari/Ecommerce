@@ -1,0 +1,31 @@
+.history-grid
+{
+    display: grid;
+    margin: 40px 5px 40px 5px;
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+
+}
+.order-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows:minmax(0px,auto) minmax(0px,auto);
+    justify-content: center;
+    align-items: center;
+    background-color: blanchedalmond;
+    border-radius: 10px;
+}
+
+@media screen and (min-width:750px){
+.history-grid
+{
+    margin: 40px 160px 40px 80px;
+}
+}
+@media screen and (min-width:960px){
+    .history-grid
+    {
+        grid-template-columns: 1fr 1fr;
+
+    }
+}

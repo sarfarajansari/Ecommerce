@@ -1,0 +1,60 @@
+/* Page Grid */
+.checkout-grid{
+    display: grid;
+    grid-template-rows:minmax(100px,auto) minmax(100px,auto);
+    grid-template-columns: 10px 1fr 10px;
+    grid-template-areas: ". summary ." ". payment .";
+    margin-bottom: 40px;
+}
+
+.payment{
+    grid-area: payment;
+}
+.summary{
+    grid-area: summary;
+}
+
+#shipping-info,#user-info ,.checkout-totals{
+    display: grid;
+    justify-content: start;
+    grid-template-columns:1fr;
+    grid-gap: 10px;
+    margin-left: 10px;
+}
+
+
+@media screen and (min-width:750px){
+    .checkout-grid{
+        display: grid;
+        grid-template-rows: minmax(100px,auto);
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "payment summary";
+        grid-gap: 20px;
+        margin-left: 20px;
+        margin-right: 100px;
+    }
+    #shipping-info,#user-info,.checkout-totals{
+        display: grid;
+        justify-content: center;
+        grid-template-columns:1fr 1fr;
+        grid-gap: 10px;
+    }
+    .payment{
+        height: max-content;
+    }
+}
+
+
+/* Summmary */
+.summary-grid{
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+    grid-template-areas: ". summary ." ". payment .";
+}
+
+.page-hidden{
+    display: none;
+}
+.page-shown{
+    display: block;
+}

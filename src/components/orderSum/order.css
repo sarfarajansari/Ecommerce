@@ -1,0 +1,22 @@
+/* Summmary */
+.summary-grid{
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+}
+
+.single-order-grid{
+    display: grid;
+    grid-template-columns:1fr;
+    grid-template-rows: minmax(100px,auto) minmax(100px,auto);
+    grid-gap: 10px;
+}
+@media screen and (min-width:750px){
+    .single-order-grid{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        margin-right: 90px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+}

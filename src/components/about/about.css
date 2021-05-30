@@ -1,0 +1,84 @@
+.about-us{
+    margin: 0 5px;
+}
+.about-salmon{
+    background-color: salmon;
+    color: white;
+}
+.info{
+    padding: 2rem 0.5rem;
+}
+.head-text{
+    color: salmon;
+}
+#message input, #message textarea{
+    background-color: black;
+    border-radius: 2rem;
+    /* background-image: linear-gradient( rgb(139, 4, 4),black); */
+    border: none;
+    color: white;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+#message input:focus, #message textarea:focus{
+    outline: none;
+    box-shadow: -5px -4px #888888;
+}
+#message textarea{
+    width: 100%;
+    
+}
+#message input{
+    width: 49%;
+    margin: 0 0.5%;
+}
+#message button{
+    font-size: 1.5rem;
+}
+.social{
+    margin-top: 2rem;
+
+}
+.social a{
+    color: rgb(247, 229, 247);
+}
+.social-icon{
+    margin-right: 1rem;
+}
+.social-icon.main{
+    font-size: 2rem;
+    color: rgb(247, 229, 247);
+}
+.social-icon:hover{
+    background-color: transparent;
+}
+
+.social-icon.main:hover{
+    background-color: rgb(97, 170, 125);
+}
+.social-item{
+    border-radius: 1rem;
+    background-color: black;
+    border: 2px solid rgb(233, 147, 147);
+    color: white;
+    padding: 1rem;
+}
+@media screen and (min-width:750px) {
+    .about-us{
+        margin: 0 15%;
+    }
+    .info{
+        padding: 2rem 1.5rem;
+    }
+    #message button{
+        font-size: 2rem;
+    }
+
+    #message textarea{
+        border: none;
+        color: white;
+        padding: 1rem;
+    }
+
+
+}

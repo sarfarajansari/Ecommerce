@@ -1,0 +1,152 @@
+@keyframes move{
+    from {top: -80px;;}
+
+    to {top:0px;}
+}
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+
+.Navbar-cust{
+    /* background-image: linear-gradient(to bottom right,#15146d,#41145f); */
+    height: 80px;
+    color: #ec8d81 ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: o;
+    border: 2px solid salmon;
+    z-index: 12;
+}
+.Navbar-cust.animate{
+    animation-name: move;
+    animation-duration: 2s;
+    animation-direction:forward;
+}
+.nav-text,#lg-toggle{
+    margin-left: 30px;
+}
+#toggle-btn{
+    position: absolute;
+    right: 1px;
+    top: 10px;
+}
+.close-nav{
+    height: 80px;
+}
+
+.menu-bars{
+    margin-right: 2rem;
+    font-size: 2rem;
+    background: none;
+}
+#toggle-btn.menu-bars{
+    margin-right: 0.5rem;
+}
+.nav-menu{
+    background-image: linear-gradient(to bottom right,#ec8d81,#862c20);
+    width: 280px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    transition: 850ms;
+    z-index: 12;
+}
+
+.nav-menu.active{
+    right: 0px;
+    transition: 350ms;
+}
+
+.nav-text{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /* padding: 8px 0px 8px 16px; */
+    list-style: none;
+    height: 60px;
+}
+.nav-text a{
+    text-decoration: none;
+    color: #f5f5f5;
+    font-size: 18px;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    padding: 0px 4px;
+    border-radius: 4px;
+
+}
+.linkk:hover{
+    background-color: #c03b29;
+}
+svg:hover{
+    background-color: #c03b29;
+}
+
+.nav-menu-items{
+    width: 100%;
+    margin-left: -60px;
+}
+.nav-toggle{
+    color: rgb(221, 47, 27);
+}
+
+.navbar-toggle{
+    background-color: #060b26;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+span{
+    margin-left: 16px;
+}
+.navbar-brand{
+    font-size: 2rem;
+    font-family: 'Pacifico',Arial, Helvetica, sans-serif;
+}
+@media screen and (min-width:750px){
+    .nav-menu-inactive{
+        right: -200px;
+        transition: 850ms;
+    }
+    .nav-menu-inactive #title{
+        display: none;
+    }
+    .toggle{
+        display: none;
+    }
+    .navbar-brand{
+        font-size: 4rem;
+    }
+    #toggle-btn{
+        right: 4px;
+    }
+
+    
+}
+@media screen and (max-width:750px){
+    .nav-menu{
+        width: 60%;
+    }
+    #lg-toggle{
+        display: none;
+    }
+}
+
+ul{
+    list-style: none;
+}
+
+.toggles-nav-sm svg:hover{
+    background-color: #eceef1!important;
+}
+.hidden-obj{
+    display: none;
+}
