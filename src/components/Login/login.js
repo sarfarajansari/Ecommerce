@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import GoogleLogin from 'react-google-login'
 import {Link, Redirect} from "react-router-dom"
 import "./login.css"
+import app_data from "../app_data/app_data"
+
 const Error=(props)=>{
     if(props.error){
         return(
@@ -32,34 +34,21 @@ export default class Login extends Component {
             email:"",
             redirect:false,
             message:"",
-            userData:{
-                status:1
-            }
+
         }
     }
-    componentDidMount(){
-        fetch("/api/check/authenticated/")
-        .then((response)=>{
-        return response.json()
-        })
-        .then((data)=>{
-            var current_state = this.state
-            current_state.userData=data
-            this.setState(current_state)
-        })
-        }
+
     login=()=>{
-        const csrftoken = getCookie('csrftoken');
         const requestdata = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
+            headers: { 'Content-Type': 'application/json' },
             body:JSON.stringify({
                 username:this.state.username,
                 password:this.state.password,
                 type:1
             })
         }
-        fetch("/api/login/",requestdata)
+        fetch(app_data.url.replace("store","auth") +"/login/",requestdata)
         .then((response)=>{
             return response.json()
         })
@@ -72,6 +61,7 @@ export default class Login extends Component {
             else{
                 current_state.error=""
                 current_state.message= data.message
+                localStorage.setItem("Token",data.token)
                 setTimeout(() => {
                     var cs = this.state
                     cs.redirect=true
@@ -86,17 +76,16 @@ export default class Login extends Component {
         var current_state = this.state
         current_state.email = response.profileObj.email
         this.setState(current_state)
-        const csrftoken = getCookie('csrftoken');
         const requestdata = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
+            headers: { 'Content-Type': 'application/json'},
             body:JSON.stringify({
                 email:response.profileObj.email,
                 type:2,
             })
         }
         console.log(requestdata)
-        fetch("/api/login/",requestdata)
+        fetch(app_data.url.replace("store","auth")+ "/login/",requestdata)
         .then((response)=>{
             return response.json()
         })
@@ -109,6 +98,7 @@ export default class Login extends Component {
             else{
                 current_state.error=""
                 current_state.message= data.message
+                localStorage.setItem("Token",data.token)
                 setTimeout(() => {
                     var cs = this.state
                     cs.redirect=true
@@ -124,7 +114,7 @@ export default class Login extends Component {
         this.setState(current_state)
     }
     render() {
-        if(this.state.redirect || this.state.userData.status===0){
+        if(this.state.redirect || localStorage.getItem("Token")!==null){
             return <Redirect to="/"/>
         }
         return (
@@ -137,7 +127,7 @@ export default class Login extends Component {
                         <Error error={this.state.error}/>
                         <Message message={this.state.message}/>
                     <div className="input-group mb-3">
-                        <span className="input-group-text w-50 row" id="inputGroup-sizing-default">Username</span>
+                        <span className="input-group-text w-50 row" id="inputGroup-sizing-default">Username or Email</span>
                         <input type="text" value={this.state.username} onChange={(e)=>this.handleinput("username",e.target.value)} name="username" maxLength={150} autoCapitalize="none" autoComplete="username" autofocus required id="id_username" className="form-control" />
                     </div>
                     <div className="input-group mb-3">
@@ -175,21 +165,4 @@ export default class Login extends Component {
             </div>
         )
     }
-}
-
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }

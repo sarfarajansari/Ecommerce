@@ -14,7 +14,6 @@ function CartComponent() {
     })
     const [pagestatus, setpagestatus] = useState(false)
 
-
     useEffect(() => {
       Postreq("/api/orderapi/",{},setorder,setpagestatus)
     }, [])

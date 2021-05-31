@@ -1,11 +1,11 @@
 import app_data from "../app_data/app_data"
 export default function Postreq(url,body,set="",loaded=""){
     body.session = JSON.parse( localStorage.getItem('session'))
-    console.log(JSON.parse( localStorage.getItem('session')))
     var headers = { 'Content-Type': 'application/json' }
-    if (localStorage.getItem('token') !== null){
-        headers["Authorization"]="Token " + localStorage.getItem('token')
+    if (localStorage.getItem('Token') !== null){
+        headers["Authorization"]="Token " + localStorage.getItem('Token')
     }
+    console.log(headers)
     const requestdata = {
         method: 'POST',
         headers: headers,

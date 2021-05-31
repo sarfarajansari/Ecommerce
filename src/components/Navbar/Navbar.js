@@ -25,19 +25,10 @@ function get_icon2(s) {
 
 function Navbar(props) {
   const [sidebar, setsidebar] = useState(false);
-  const [userData, setuserData] = useState({
-    status:1
-  })
   const showsidebar = () => {
     setsidebar(!sidebar);
   };
-  useEffect(() => {
-    fetch("/api/check/authenticated")
-    .then((response)=>{
-      return response.json()
-    })
-    .then((data)=>setuserData(data))
-  }, [])
+
 
   return (
     <IconContext.Provider value={{ color: "#fff" }}>
@@ -89,17 +80,17 @@ function Navbar(props) {
                   <span id="title">Message</span>
                 </a>
               </li>
-              <li  className={userData.status===1?'nav-text':"hidden-obj"}>
+              <li  className={localStorage.getItem("Token")===null?'nav-text':"hidden-obj"}>
                 <Link style={{"color":"white"}} to="/login"  className={sidebar?"linkk":"svg"}>
                   <RiLoginBoxFill/>
                   <span id="title">Login</span>
                 </Link>
               </li>
-              <li  className={userData.status===0?'nav-text':"hidden-obj"}>
-                <a style={{"color":"white"}} href="/logout" className={sidebar?"linkk":"svg"}>
+              <li  className={localStorage.getItem("Token")!==null?'nav-text':"hidden-obj"}>
+                <Link onClick={()=>localStorage.removeItem("Token")} style={{"color":"white"}} to="/login" className={sidebar?"linkk":"svg"}>
                   <RiLogoutBoxFill/>
                   <span id="title">Logout</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

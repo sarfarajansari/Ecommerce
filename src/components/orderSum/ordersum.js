@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import Loading from "../loading/loading"
 import "./order.css"
 import Postreq from "../request/post_request"
+import app_data from "../app_data/app_data";
 
 
 export default function Ordersum(props) {
@@ -57,7 +58,7 @@ export default function Ordersum(props) {
                 <div className="item-OI">
                   <hr></hr>
                   <Link to={"/product/"+String(item.product)}>
-                    <img className="row-image" src={item.image} alt="" />
+                    <img className="row-image" src={app_data.url.replace("store","static") + item.image} alt="" />
                   </Link>
                 </div>
                 <div className="item-OI">

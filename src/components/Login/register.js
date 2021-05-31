@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
 import { Redirect ,Link} from "react-router-dom";
 import "./login.css";
+import app_data from "../app_data/app_data"
+
 const Error = (props) => {
   if (props.error) {
     return (
@@ -23,7 +25,7 @@ const Message = (props) => {
   return <></>;
 };
 function generatePassword() {
-  var length = 11,
+  var length = 20,
       charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
       retVal = "";
   for (var i = 0, n = charset.length; i < length; ++i) {
@@ -40,42 +42,28 @@ export default class Register extends Component {
       redirect: false,
       message: "",
       creds: {
-        name: "",
         email: "",
         otp: "",
         username: "",
         password1: "",
         password2: "",
+        Fname:"",
+        Lname:""
       },
-      userData:{
-        status:1
-      }
     };
   }
-  componentDidMount(){
-    console.log(generatePassword())
-    fetch("/api/check/authenticated/")
-    .then((response)=>{
-    return response.json()
-    })
-    .then((data)=>{
-        var current_state = this.state
-        current_state.userData=data
-        this.setState(current_state)
-    })
-    }
+
   register = () => {
     var current_state = this.state;
     var password=this.state.creds.password1
     if(password===this.state.creds.password2 && password!==""){
         if(this.state.creds.password1.length>7){
-            const csrftoken = getCookie("csrftoken");
             const requestdata = {
             method: "POST",
-            headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
+            headers: { "Content-Type": "application/json"},
             body: JSON.stringify(this.state.creds),
             };
-            fetch("/api/register/", requestdata)
+            fetch( app_data.url.replace("store","auth") + "/register/", requestdata)
             .then((response) => {
             return response.json();
             })
@@ -84,10 +72,12 @@ export default class Register extends Component {
                 if (data.status !== 0) {
                     current_state.error = data.message;
                     current_state.message = "";
+                    
                 } 
                 else {
                     current_state.error = "";
                     current_state.message = data.message;
+                    localStorage.setItem("Token",data.token)
                     setTimeout(() => {
                     var cs = this.state;
                     cs.redirect = true;
@@ -114,7 +104,8 @@ export default class Register extends Component {
     console.log(profile);
     var current_state = this.state;
     current_state.creds.email = profile.email;
-    current_state.creds.name = profile.name;
+    current_state.creds.Lname = profile.familyName;
+    current_state.creds.Fname = profile.givenName;
 
 
     var array =profile.name.split(" ",4)
@@ -138,11 +129,11 @@ export default class Register extends Component {
   getOtp=()=>{
     const requestdata = {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({email:this.state.creds.email
       }),
     };
-    fetch("/api/otp/", requestdata)
+    fetch( app_data.url.replace("store","auth") + "/otp/", requestdata)
     .then((response) => {
     return response.json();
     })
@@ -174,7 +165,7 @@ export default class Register extends Component {
     }
   }
   render() {
-    if (this.state.redirect || this.state.userData.status===0) {
+    if (this.state.redirect || localStorage.getItem("Token")!==null) {
       return <Redirect to="/" />;
     }
     return (
@@ -246,22 +237,35 @@ export default class Register extends Component {
                 className="input-group-text w-50 row"
                 id="inputGroup-sizing-default"
               >
-                Full Name
+                {"First name & Last name"}
               </span>
               <input
                 type="text"
-                value={this.state.creds.name}
-                onChange={(e) => this.handleinput("name", e.target.value)}
-                name="name"
+                value={this.state.creds.Fname}
+                onChange={(e) => this.handleinput("Fname", e.target.value)}
+                name="Fname"
                 maxLength={150}
-                autoCapitalize="none"
-                autoComplete="username"
+                autoComplete="first name"
+                autofocus
+                required
+                id="id_username"
+                className="form-control"
+              />
+              <input
+                type="text"
+                value={this.state.creds.Lname}
+                onChange={(e) => this.handleinput("Lname", e.target.value)}
+                name="Lname"
+                maxLength={150}
+                autoComplete="last name"
                 autofocus
                 required
                 id="id_username"
                 className="form-control"
               />
             </div>
+            
+
             <div className="input-group mb-3">
               <span
                 className="input-group-text w-50 row"
@@ -369,18 +373,4 @@ export default class Register extends Component {
   }
 }
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === name + "=") {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
+
