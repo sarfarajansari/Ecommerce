@@ -72,7 +72,6 @@ export default class Login extends Component {
         })
     }
     responseGoogle=(response)=>{
-        console.log(response.profileObj.email);
         var current_state = this.state
         current_state.email = response.profileObj.email
         this.setState(current_state)
@@ -84,7 +83,6 @@ export default class Login extends Component {
                 type:2,
             })
         }
-        console.log(requestdata)
         fetch(app_data.url.replace("store","auth")+ "/login/",requestdata)
         .then((response)=>{
             return response.json()

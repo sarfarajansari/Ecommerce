@@ -1,7 +1,7 @@
 {
   "name": "reactapp",
-  "homepage": "https://github.com/sarfarajansari/Ecommerce/",
   "version": "0.1.0",
+  "homepage": "https://sarfarajansari.github.io/Ecommerce/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.12.0",

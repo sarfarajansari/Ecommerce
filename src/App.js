@@ -17,7 +17,7 @@ function App() {
   },[])
   return (
 
-      <Router>
+      <Router basename="/Ecommerce">
         <Switch>
           <Route path="/" exact component={store} />
           <Route path="/product/:id" exact component={Product} />

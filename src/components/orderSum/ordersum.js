@@ -20,7 +20,6 @@ export default function Ordersum(props) {
         address:""
       }
     })
-    console.log(id)
 
     useEffect(() => {
       Postreq("/api/completed/order/"+ String(id),{},setorder,setpagestatus)

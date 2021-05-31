@@ -5,7 +5,6 @@ export default function Postreq(url,body,set="",loaded=""){
     if (localStorage.getItem('Token') !== null){
         headers["Authorization"]="Token " + localStorage.getItem('Token')
     }
-    console.log(headers)
     const requestdata = {
         method: 'POST',
         headers: headers,
@@ -16,7 +15,6 @@ export default function Postreq(url,body,set="",loaded=""){
         return response.json()
     })
     .then((data)=>{
-        console.log(data)
         if (set){
             set(data)
         }

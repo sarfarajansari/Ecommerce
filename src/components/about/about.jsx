@@ -50,7 +50,6 @@ export default function About() {
             return response.json()
         })
         .then((data)=>{
-            console.log(data)
             if(data.status!==0){
                 setAlert({
                     message:"",

@@ -68,7 +68,6 @@ export default class Register extends Component {
             return response.json();
             })
             .then((data) => {
-                console.log(data)
                 if (data.status !== 0) {
                     current_state.error = data.message;
                     current_state.message = "";
@@ -101,7 +100,6 @@ export default class Register extends Component {
   };
   responseGoogle = (response) => {
     var profile = response.profileObj
-    console.log(profile);
     var current_state = this.state;
     current_state.creds.email = profile.email;
     current_state.creds.Lname = profile.familyName;
@@ -118,7 +116,6 @@ export default class Register extends Component {
     current_state.creds.password2=current_state.creds.password1
     this.setState(current_state);
     
-    console.log(current_state)
     this.register()
   };
   handleinput(index, value) {
@@ -138,7 +135,6 @@ export default class Register extends Component {
     return response.json();
     })
     .then((data)=>{
-        console.log(data)
         var current_state = this.state
         if (data.status===0){
             current_state.error=""
@@ -175,7 +171,6 @@ export default class Register extends Component {
           onSubmit={(e) => {
             e.preventDefault()
             var otp = this.state.otp
-            console.log(otp)
             if(String(otp)===String(this.state.creds.otp) && otp!==""){
                 this.register()
             }
