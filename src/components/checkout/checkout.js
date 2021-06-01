@@ -5,6 +5,7 @@ import "./checkout.css"
 import * as Hi from "react-icons/hi"
 import { Link, Redirect } from 'react-router-dom'
 import Error from "../min/error"
+import app_data from "../app_data/app_data"
 
 function getCookie(name) {
     let cookieValue = null;
@@ -29,7 +30,8 @@ class CheckoutComponent extends React.Component{
             loaded:false,
             showPayment:false,
             shippingdata:{
-                "name":"",
+                "Fname":"",
+                "Lname":"",
                 "email":"",
                 "address":"",
                 "state":"",
@@ -59,12 +61,17 @@ class CheckoutComponent extends React.Component{
                 }
             })
         }
-        componentDidUpdate(){
-            this.render();
-        }
         get_order(){
-            var url = '/api/orderapi';
-            fetch(url)
+            var headers = { 'Content-Type': 'application/json' }
+            if (localStorage.getItem('Token') !== null){
+                headers["Authorization"]="Token " + localStorage.getItem('Token')
+            }
+            const requestdata = {
+                method: 'POST',
+                headers: headers,
+                body:JSON.stringify({session: JSON.parse( localStorage.getItem('session'))})
+            }
+            fetch(app_data.url+ '/api/orderapi/' ,requestdata)
             .then((response)=>{
                 return response.json()
             })
@@ -74,6 +81,7 @@ class CheckoutComponent extends React.Component{
                 current_state.order = data
                 this.setState(current_state)
                 console.log(data)
+
             })
         }
 
@@ -103,15 +111,18 @@ class CheckoutComponent extends React.Component{
                         <div className="payment box-element">
                             <div className={this.state.showPayment?"page-shown":"page-hidden"}>
                                 <button type="button" id="btn-payment" onClick={()=>{
-                                        const csrftoken = getCookie('csrftoken');
-                                        var url =  "/api/submit/order/"
+                                        var headers = { 'Content-Type': 'application/json' }
+                                        if (localStorage.getItem('Token') !== null){
+                                            headers["Authorization"]="Token " + localStorage.getItem('Token')
+                                        }
+                                        var body= this.state.shippingdata
+                                        body.session = JSON.parse( localStorage.getItem('session'))
                                         const requestdata = {
                                             method: 'POST',
-                                            headers: { 'Content-Type': 'application/json',"X-CSRFToken":csrftoken },
-                                            body:JSON.stringify(this.state.shippingdata)
+                                            headers: headers,
+                                            body:JSON.stringify(body)
                                         }
-                                       
-                                        fetch(url,requestdata)
+                                        fetch(app_data.url+ "/api/submit/order/" ,requestdata)
                                         .then((response)=>{
                                             return response.json()
                                         })
@@ -123,7 +134,10 @@ class CheckoutComponent extends React.Component{
                                             }
                                             current_state.submitted= data.status
                                             this.setState(current_state)
-                                            
+                                            if ("session" in data){
+                                                localStorage.setItem("session",JSON.stringify(data.session))
+                                            }
+
                                         })
                                         
                                         alert("payment successful!")
@@ -142,7 +156,10 @@ class CheckoutComponent extends React.Component{
                             <Error status={this.state.submitted} error={'Error occured while submitting order'}/>
                         <div id="user-info">
                                     <div className="form-field">
-                                    <input required className="form-control" value={this.state.shippingdata.name} onChange={(e)=>this.handleinput("name",e.target.value)} type="text" id="name" placeholder="Name.." />
+                                    <input required className="form-control" value={this.state.shippingdata.Fname} onChange={(e)=>this.handleinput("Fname",e.target.value)} type="text" id="name" placeholder="First name.." />
+                                    </div>
+                                    <div className="form-field">
+                                    <input required className="form-control" value={this.state.shippingdata.Lname} onChange={(e)=>this.handleinput("Lname",e.target.value)} type="text" id="name" placeholder="Last name.." />
                                     </div>
                                     <div className="form-field">
                                     <input required className="form-control" value={this.state.shippingdata.email} onChange={(e)=>this.handleinput("email",e.target.value)} type="email" id="email" placeholder="Email.." />
@@ -198,7 +215,7 @@ class CheckoutComponent extends React.Component{
                                     <Link to={"/product/"+String(item.product)}>
                                     <img
                                         className="row-image"
-                                        src={item.image}
+                                        src={app_data.url.replace("store","static") +  item.image}
                                         alt=""
                                     />
                                     </Link>

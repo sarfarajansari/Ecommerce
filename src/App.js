@@ -9,12 +9,9 @@ import Page from "./pages/page";
 import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    if (localStorage.getItem('session') === null){
-      localStorage.setItem("session",JSON.stringify({}))
-    }
-
-  },[])
+  if (localStorage.getItem('session') === null){
+    localStorage.setItem("session",JSON.stringify({}))
+  }
   return (
 
       <Router basename="/Ecommerce">
