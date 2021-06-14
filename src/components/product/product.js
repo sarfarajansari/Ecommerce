@@ -84,7 +84,7 @@ function ProductComponent(props) {
                 <div className="detail-grid">
                     <div className="corosoul box-element">
 
-                        <section className="slider">
+                        <section className="slider overflow">
                             <FaArrowAltCircleLeft className="left-arrow" onClick={previous_image}></FaArrowAltCircleLeft>
                             <FaArrowAltCircleRight className="right-arrow" onClick={next_image}></FaArrowAltCircleRight>
                             {Product.images.map((img,index)=>{

@@ -20,6 +20,9 @@
   }
 }
 
+.overflow{
+  overflow: hidden
+}
 
 /* custom */
 .Form{
