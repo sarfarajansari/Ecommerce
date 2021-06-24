@@ -88,7 +88,7 @@ function ProductComponent(props) {
                             <FaArrowAltCircleLeft className="left-arrow" onClick={previous_image}></FaArrowAltCircleLeft>
                             <FaArrowAltCircleRight className="right-arrow" onClick={next_image}></FaArrowAltCircleRight>
                             {Product.images.map((img,index)=>{
-                                return <img className={index===Current?"image active":"image"} src={ app_data.url.replace("store","static") + img.img} alt="yellow"></img>
+                                return <img className={index===Current?"image active":"image"} src={img.img} alt="yellow"></img>
                             })}
                             
                         </section>

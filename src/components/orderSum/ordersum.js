@@ -57,7 +57,7 @@ export default function Ordersum(props) {
                 <div className="item-OI">
                   <hr></hr>
                   <Link to={"/product/"+String(item.product)}>
-                    <img className="row-image" src={app_data.url.replace("store","static") + item.image} alt="" />
+                    <img className="row-image" src={ item.image} alt="" />
                   </Link>
                 </div>
                 <div className="item-OI">

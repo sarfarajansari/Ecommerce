@@ -75,7 +75,7 @@ function Navbar(props) {
                 );
               })}
               <li  className="nav-text">
-                <a style={{"color":"white"}} href="/about/#contact"  className={sidebar?"linkk":"svg"}>
+                <a style={{"color":"white"}} href="/Ecommerce/#/about/#contact"  className={sidebar?"linkk":"svg"}>
                   <Fa.FaEnvelopeOpenText/>
                   <span id="title">Message</span>
                 </a>

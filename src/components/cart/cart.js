@@ -98,7 +98,7 @@ function CartComponent() {
                         <Link to={"/product/"+String(item.product)}>
                         <img
                             className="row-image"
-                            src={app_data.url.replace("store","static")+ item.image}
+                            src={item.image}
                             alt=""
                           />
                         </Link>

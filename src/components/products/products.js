@@ -4,7 +4,6 @@ import Loading from "../loading/loading"
 import Cartloading from "../loading/Cartloading"
 import { Link } from "react-router-dom"
 import Alert from "../min/alert"
-import app_data from "../app_data/app_data"
 import GetRequest from "../request/get_request"
 import Postreq from "../request/post_request"
 
@@ -40,7 +39,7 @@ function Products() {
                 {products.map((product,index) => {
                     return(
                         <div key={index}  class="elem" >
-                            <img className="thumbnail" src={app_data.url.replace("/store","")+"/static"+ product.image} alt="placeholder"/>
+                            <img className="thumbnail" src={product.image} alt="placeholder"/>
 
                             <div class="box-element product">
                                 <h6><strong>{product.name}</strong></h6>

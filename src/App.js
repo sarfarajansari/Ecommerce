@@ -1,12 +1,11 @@
 import "./main.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-import {BrowserRouter as Router, Switch ,Route} from "react-router-dom";
+import {HashRouter as Router, Switch ,Route} from "react-router-dom";
 import store from "./pages/store";
 import Product from "./pages/product";
 import order from "./pages/order";
 import Page from "./pages/page";
-import { useEffect } from "react";
 
 function App() {
   if (localStorage.getItem('session') === null){
